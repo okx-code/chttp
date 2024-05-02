@@ -9,10 +9,19 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    exe.addCSourceFiles(&[_][]const u8{
-        "src/main.c",
-        "src/http_state_machine.c",
-    }, &[_][]const u8{ "-Wall", "-Werror", "-pedantic", "-std=c11" });
+    exe.addCSourceFiles(.{
+        .root = .{ .path = "src" },
+        .files = &[_][]const u8{
+            "main.c",
+            "http_state_machine.c",
+        },
+        .flags = &[_][]const u8{
+            "-Wall",
+            "-Werror",
+            "-pedantic",
+            "-std=c11",
+        },
+    });
     exe.addIncludePath(.{ .path = "src" });
     exe.linkLibC();
     exe.linkSystemLibrary("event_core");
